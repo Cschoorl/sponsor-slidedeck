@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to Being — Sponsordeck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+
+        /* ── Loading screen ── */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: #F7F5F0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #lottie-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #F7F5F0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #111111;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Slides ── */
+        .deck {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 56px 96px 80px;
+            opacity: 0;
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ── Shared typography ── */
+        .slide-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 48px;
+        }
+
+        em {
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* ── Navigation dots ── */
+        .nav {
+            position: fixed;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 200;
+        }
+
+        .nav-dot {
+            height: 5px;
+            width: 5px;
+            border-radius: 99px;
+            background: #C8C4BC;
+            cursor: pointer;
+            transition: width 0.35s ease, background 0.35s ease;
+        }
+
+        .nav-dot.active {
+            width: 22px;
+            background: #111;
+        }
+
+        /* ── Arrow buttons ── */
+        .arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #111;
+            opacity: 0.18;
+            transition: opacity 0.2s;
+            font-size: 20px;
+            padding: 24px 20px;
+            z-index: 200;
+            line-height: 1;
+        }
+
+        .arrow:hover { opacity: 0.6; }
+        .arrow-prev { left: 12px; }
+        .arrow-next { right: 12px; }
+
+        /* ── Slide counter ── */
+        .slide-counter {
+            position: fixed;
+            bottom: 32px;
+            right: 96px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            color: #BBB;
+            z-index: 200;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 1 — Cover
+        ──────────────────────────────────── */
+        .slide-cover {
+            justify-content: space-between;
+        }
+
+        .brand-wordmark {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #111;
+        }
+
+        .cover-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 28px;
+        }
+
+        .cover-headline {
+            font-size: clamp(40px, 5.6vw, 80px);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            max-width: 820px;
+        }
+
+        .cover-sub {
+            font-size: clamp(16px, 1.4vw, 20px);
+            font-weight: 400;
+            color: #666;
+            line-height: 1.7;
+            max-width: 500px;
+        }
+
+        .cover-meta {
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #AAA;
+            font-weight: 400;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 2 — Verhaal
+        ──────────────────────────────────── */
+        .slide-story {
+            justify-content: center;
+        }
+
+        .story-headline {
+            font-size: clamp(38px, 4.8vw, 68px);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            max-width: 640px;
+            margin-bottom: 36px;
+        }
+
+        .story-body {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            max-width: 520px;
+        }
+
+        .story-body p {
+            font-size: clamp(15px, 1.2vw, 18px);
+            line-height: 1.75;
+            color: #444;
+            font-weight: 400;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 3 — Project
+        ──────────────────────────────────── */
+        .slide-project {
+            justify-content: center;
+        }
+
+        .project-headline {
+            font-size: clamp(38px, 4.8vw, 68px);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            max-width: 640px;
+            margin-bottom: 28px;
+        }
+
+        .project-desc {
+            font-size: clamp(15px, 1.2vw, 18px);
+            line-height: 1.75;
+            color: #444;
+            max-width: 520px;
+            margin-bottom: 52px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 64px;
+            align-items: flex-end;
+        }
+
+        .stat-number {
+            font-size: clamp(48px, 5vw, 72px);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            color: #111;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #AAA;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 56px;
+            background: #E0DDD8;
+            align-self: center;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 4 — Partnership
+        ──────────────────────────────────── */
+        .slide-partner {
+            justify-content: center;
+        }
+
+        .partner-headline {
+            font-size: clamp(38px, 4.8vw, 68px);
+            font-weight: 600;
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            max-width: 680px;
+            margin-bottom: 52px;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px 96px;
+            max-width: 680px;
+        }
+
+        .value-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .value-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111;
+            letter-spacing: -0.01em;
+        }
+
+        .value-desc {
+            font-size: 14px;
+            color: #777;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 5 — Close (dark)
+        ──────────────────────────────────── */
+        .slide-close {
+            background: #111111;
+            color: #F7F5F0;
+            justify-content: center;
+        }
+
+        .close-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(247, 245, 240, 0.3);
+            margin-bottom: 48px;
+        }
+
+        .close-headline {
+            font-size: clamp(64px, 9vw, 128px);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            color: #F7F5F0;
+            margin-bottom: 32px;
+        }
+
+        .close-sub {
+            font-size: clamp(15px, 1.3vw, 19px);
+            color: rgba(247, 245, 240, 0.45);
+            font-weight: 300;
+            margin-bottom: 56px;
+            letter-spacing: -0.01em;
+        }
+
+        .close-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .close-contact a {
+            font-size: clamp(14px, 1.1vw, 17px);
+            color: rgba(247, 245, 240, 0.55);
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s ease;
+            letter-spacing: -0.005em;
+        }
+
+        .close-contact a:hover {
+            color: #F7F5F0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Loading screen ── -->
+<div id="loader">
+    <div id="lottie-container"></div>
+</div>
+
+<div class="deck">
+
+    <!-- ── Slide 1: Cover ── -->
+    <div class="slide slide-cover active" data-index="0">
+        <div class="brand-wordmark">Back to Being</div>
+
+        <div class="cover-body">
+            <h1 class="cover-headline">
+                Als AI het werk overneemt,<br>
+                wat doe <em>jij</em> dan nog zelf?
+            </h1>
+            <p class="cover-sub">
+                Drie ondernemers lopen de Camino om die vraag te beantwoorden — en bouwen onderweg software voor jongeren met mentale problemen.
+            </p>
+        </div>
+
+        <div class="cover-meta">Augustus 2026 &nbsp;&middot;&nbsp; Portugal &nbsp;&middot;&nbsp; 120 km &nbsp;&middot;&nbsp; 6 dagen</div>
+    </div>
+
+    <!-- ── Slide 2: Verhaal ── -->
+    <div class="slide slide-story" data-index="1">
+        <div class="slide-label">01 &nbsp;&mdash;&nbsp; Het verhaal</div>
+
+        <h2 class="story-headline">Altijd aanstaan<br>kost <em>wat.</em></h2>
+
+        <div class="story-body">
+            <p>Wij zijn Caesar, Stijn en Max. Twintigers die ondernemen in een tijdperk waarin AI steeds meer uitvoerend werk overneemt. Bouwen gaat sneller dan ooit. De druk ook.</p>
+            <p>Wij herkennen de constante drang om door te gaan — en tegelijkertijd de vraag: hoeveel van dat werk voeg je zelf eigenlijk nog toe?</p>
+            <p>Midden augustus lopen we de Camino in Portugal. Niet als vakantie. Als experiment. Zes dagen, terwijl we met AI een app bouwen voor stichting MIND.</p>
+        </div>
+    </div>
+
+    <!-- ── Slide 3: Project ── -->
+    <div class="slide slide-project" data-index="2">
+        <div class="slide-label">02 &nbsp;&mdash;&nbsp; Het project</div>
+
+        <h2 class="project-headline">Ons kantoor<br>zit in een <em>rugzak.</em></h2>
+
+        <p class="project-desc">
+            MacBook in de tas. Smartglasses als scherm. Starlink voor wifi. AI-agents via AirPods. We bouwen onderweg een app voor stichting MIND en leggen alles vast in een mini-documentaire.
+        </p>
+
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-number">120</div>
+                <div class="stat-label">Kilometer</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Dagen</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <div class="stat-number">1</div>
+                <div class="stat-label">App voor MIND</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Slide 4: Partnership ── -->
+    <div class="slide slide-partner" data-index="3">
+        <div class="slide-label">03 &nbsp;&mdash;&nbsp; Jouw plek</div>
+
+        <h2 class="partner-headline">Partners worden<br>onderdeel van het <em>verhaal.</em></h2>
+
+        <div class="value-grid">
+            <div class="value-item">
+                <span class="value-title">Documentaire</span>
+                <span class="value-desc">Prominent aanwezig in de mini-doc die na de tocht uitkomt.</span>
+            </div>
+            <div class="value-item">
+                <span class="value-title">Social media</span>
+                <span class="value-desc">Branded content op LinkedIn, Instagram en TikTok gericht op ondernemers en tech.</span>
+            </div>
+            <div class="value-item">
+                <span class="value-title">Netwerk</span>
+                <span class="value-desc">Toegang tot het netwerk van Techleap, Ron Simpson, Marleen Evertzs en anderen.</span>
+            </div>
+            <div class="value-item">
+                <span class="value-title">Maatwerk</span>
+                <span class="value-desc">Gear, reiskosten of financieel — we stemmen jouw plek op maat af.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Slide 5: Close ── -->
+    <div class="slide slide-close" data-index="4">
+        <div class="close-label">Back to Being &nbsp;&middot;&nbsp; Augustus 2026</div>
+
+        <h2 class="close-headline">Loop met<br>ons mee.</h2>
+
+        <p class="close-sub">De route begint in augustus. Er zijn nog plekken.</p>
+
+        <div class="close-contact">
+            <a href="https://backtobeing.tech" target="_blank">backtobeing.tech</a>
+            <a href="mailto:caesar.schoorl@gmail.com">caesar.schoorl@gmail.com</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- ── Navigation ── -->
+<nav class="nav" id="nav" aria-label="Slide navigatie">
+    <div class="nav-dot active" onclick="goTo(0)" role="button" aria-label="Slide 1"></div>
+    <div class="nav-dot" onclick="goTo(1)" role="button" aria-label="Slide 2"></div>
+    <div class="nav-dot" onclick="goTo(2)" role="button" aria-label="Slide 3"></div>
+    <div class="nav-dot" onclick="goTo(3)" role="button" aria-label="Slide 4"></div>
+    <div class="nav-dot" onclick="goTo(4)" role="button" aria-label="Slide 5"></div>
+</nav>
+
+<button class="arrow arrow-prev" onclick="prev()" aria-label="Vorige slide">&#8592;</button>
+<button class="arrow arrow-next" onclick="next()" aria-label="Volgende slide">&#8594;</button>
+
+<div class="slide-counter" id="slideCounter">1 / 5</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const dots   = document.querySelectorAll('.nav-dot');
+    const counter = document.getElementById('slideCounter');
+    const prevBtn = document.querySelector('.arrow-prev');
+    const nextBtn = document.querySelector('.arrow-next');
+    let current = 0;
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+
+        counter.textContent = `${current + 1} / ${slides.length}`;
+
+        const dark = slides[current].classList.contains('slide-close');
+
+        dots.forEach((d, i) => {
+            if (dark) {
+                d.style.background = i === current ? '#F7F5F0' : 'rgba(247,245,240,0.25)';
+            } else {
+                d.style.background = i === current ? '#111' : '#C8C4BC';
+            }
+            d.style.width = i === current ? '22px' : '5px';
+        });
+
+        const uiColor = dark ? 'rgba(247,245,240,0.4)' : '#BBB';
+        counter.style.color = uiColor;
+        prevBtn.style.color  = dark ? '#F7F5F0' : '#111';
+        nextBtn.style.color  = dark ? '#F7F5F0' : '#111';
+    }
+
+    function next() { if (current < slides.length - 1) goTo(current + 1); }
+    function prev() { if (current > 0) goTo(current - 1); }
+
+    document.addEventListener('keydown', e => {
+        if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); next(); }
+        if (['ArrowLeft', 'ArrowUp'].includes(e.key))          { e.preventDefault(); prev(); }
+    });
+
+    // ── Loading screen ──
+    const loader = document.getElementById('loader');
+    const anim = lottie.loadAnimation({
+        container: document.getElementById('lottie-container'),
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
+        path: './logo-animation.json'
+    });
+
+    anim.addEventListener('complete', () => {
+        loader.classList.add('fade-out');
+        loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+    });
+
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+        const diff = tx - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 48) diff > 0 ? next() : prev();
+    });
+</script>
+
+</body>
+</html>
