@@ -276,7 +276,53 @@
         }
 
         /* ────────────────────────────────────
-           SLIDE 4 — Partnership
+           SLIDE 3 — Wat we zoeken
+        ──────────────────────────────────── */
+        .ask-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 80px;
+            max-width: 760px;
+        }
+
+        .ask-col-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E0DDD8;
+        }
+
+        .ask-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ask-item {
+            font-size: clamp(14px, 1.1vw, 16px);
+            color: #333;
+            font-weight: 400;
+            line-height: 1.5;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .ask-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 9px;
+            width: 5px;
+            height: 1px;
+            background: #BBB;
+        }
+
+        /* ────────────────────────────────────
+           SLIDE 4 — Wat je krijgt
         ──────────────────────────────────── */
         .slide-partner {
             justify-content: center;
@@ -288,13 +334,13 @@
             line-height: 1.08;
             letter-spacing: -0.025em;
             max-width: 680px;
-            margin-bottom: 52px;
+            margin-bottom: 48px;
         }
 
         .value-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 36px 96px;
+            gap: 32px 96px;
             max-width: 680px;
         }
 
@@ -412,56 +458,58 @@
         </div>
     </div>
 
-    <!-- ── Slide 3: Project ── -->
+    <!-- ── Slide 3: Wat we zoeken ── -->
     <div class="slide slide-project" data-index="2">
-        <div class="slide-label">02 &nbsp;&mdash;&nbsp; Het project</div>
+        <div class="slide-label">02 &nbsp;&mdash;&nbsp; Wat we zoeken</div>
 
-        <h2 class="project-headline">Ons kantoor<br>zit in een <em>rugzak.</em></h2>
+        <h2 class="project-headline">Gear of budget —<br><em>beide welkom.</em></h2>
 
-        <p class="project-desc">
-            MacBook in de tas. Smartglasses als scherm. Starlink voor wifi. AI-agents via AirPods. We bouwen onderweg een app voor stichting MIND en leggen alles vast in een mini-documentaire.
-        </p>
-
-        <div class="stats-row">
-            <div class="stat">
-                <div class="stat-number">120</div>
-                <div class="stat-label">Kilometer</div>
+        <div class="ask-grid">
+            <div>
+                <div class="ask-col-title">Gear</div>
+                <div class="ask-items">
+                    <div class="ask-item">Smartglasses (bijv. Ray-Ban Meta of Xreal)</div>
+                    <div class="ask-item">Starlink Mini</div>
+                    <div class="ask-item">Camera setup voor de documentaire</div>
+                    <div class="ask-item">Draagbare zonnelader of powerbank</div>
+                    <div class="ask-item">Hiking gear — rugzak, schoenen, kleding</div>
+                </div>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat">
-                <div class="stat-number">6</div>
-                <div class="stat-label">Dagen</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat">
-                <div class="stat-number">1</div>
-                <div class="stat-label">App voor MIND</div>
+            <div>
+                <div class="ask-col-title">Budget</div>
+                <div class="ask-items">
+                    <div class="ask-item">Vluchten naar Portugal</div>
+                    <div class="ask-item">Verblijf langs de Camino</div>
+                    <div class="ask-item">Aanvullende techniek en apparatuur</div>
+                    <div class="ask-item">Productie van de mini-documentaire</div>
+                    <div class="ask-item">Onverwachte kosten onderweg</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ── Slide 4: Partnership ── -->
+    <!-- ── Slide 4: Wat je krijgt ── -->
     <div class="slide slide-partner" data-index="3">
-        <div class="slide-label">03 &nbsp;&mdash;&nbsp; Jouw plek</div>
+        <div class="slide-label">03 &nbsp;&mdash;&nbsp; Wat je terugkrijgt</div>
 
-        <h2 class="partner-headline">Partners worden<br>onderdeel van het <em>verhaal.</em></h2>
+        <h2 class="partner-headline">Jouw merk in een verhaal<br>dat mensen <em>bijblijft.</em></h2>
 
         <div class="value-grid">
             <div class="value-item">
                 <span class="value-title">Documentaire</span>
-                <span class="value-desc">Prominent aanwezig in de mini-doc die na de tocht uitkomt.</span>
+                <span class="value-desc">Prominente vermelding in de mini-doc die na de tocht wordt uitgebracht en gedeeld.</span>
             </div>
             <div class="value-item">
                 <span class="value-title">Social media</span>
-                <span class="value-desc">Branded content op LinkedIn, Instagram en TikTok gericht op ondernemers en tech.</span>
+                <span class="value-desc">Branded content tijdens en na de reis op LinkedIn, Instagram en TikTok.</span>
             </div>
             <div class="value-item">
                 <span class="value-title">Netwerk</span>
-                <span class="value-desc">Toegang tot het netwerk van Techleap, Ron Simpson, Marleen Evertzs en anderen.</span>
+                <span class="value-desc">Zichtbaarheid binnen het netwerk van Techleap, Ron Simpson, Marleen Evertzs en Samuel Hodenpijl.</span>
             </div>
             <div class="value-item">
-                <span class="value-title">Maatwerk</span>
-                <span class="value-desc">Gear, reiskosten of financieel — we stemmen jouw plek op maat af.</span>
+                <span class="value-title">Verhaalrecht</span>
+                <span class="value-desc">Gebruik van content, quotes en beeldmateriaal van de tocht voor eigen kanalen.</span>
             </div>
         </div>
     </div>
@@ -472,11 +520,11 @@
 
         <h2 class="close-headline">Loop met<br>ons mee.</h2>
 
-        <p class="close-sub">De route begint in augustus. Er zijn nog plekken.</p>
+        <p class="close-sub">We vertrekken augustus 2026. Spots zijn beperkt — neem vandaag contact op.</p>
 
         <div class="close-contact">
-            <a href="https://backtobeing.tech" target="_blank">backtobeing.tech</a>
             <a href="mailto:caesar.schoorl@gmail.com">caesar.schoorl@gmail.com</a>
+            <a href="https://backtobeing.tech" target="_blank">backtobeing.tech</a>
         </div>
     </div>
 
